@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive Army Map</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .territory { 
+      cursor: pointer; 
+      padding: 10px; 
+      margin: 5px; 
+      display: inline-block; 
+      border: 2px solid black; 
+      border-radius: 5px;
+      min-width: 120px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .red { background-color: #f44336; color:white; }
+    .blue { background-color: #2196F3; color:white; }
+    .neutral { background-color: #ccc; color:black; }
+  </style>
+</head>
+<body>
+  <h1>🏞 Interactive Army Map</h1>
+  <div id="map"></div>
+
+  <script>
+    fetch('army-map.json')
+      .then(response => response.json())
+      .then(data => {
+        const mapDiv = document.getElementById('map');
+
+        for(const [name, info] of Object.entries(data.territories)){
+          const div = document.createElement('div');
+          div.className = `territory ${info.team}`;
+          div.innerText = `${name}\n(${info.type})`;
+
+          div.onclick = () => {
+            alert(
+              `Territory: ${name}\n` +
+              `Type: ${info.type}\n` +
+              `Owner: ${info.owner}\n` +
+              `Points: ${info.points}`
+            );
+          };
+
+          mapDiv.appendChild(div);
+        }
+      })
+      .catch(err => console.error("Error loading map:", err));
+  </script>
+</body>
+</html>
